@@ -22,11 +22,9 @@ for minimum required permissions to run the tool. You may either assign the poli
 the tool will assume via AssumeRole api call.
 
 ### Running without external role
-1. ```docker run -e AWS_ACCESS_KEY_ID=<key> -e AWS_SECRET_ACCESS_KEY=<secret> tilo tilo --services=ec2 --period=5 
---samples=36 --threshold=1
+1. ```docker run -e AWS_ACCESS_KEY_ID=<key> -e AWS_SECRET_ACCESS_KEY=<secret> tilo tilo --services=ec2 --period=5 --samples=36 --threshold=1```
 This will stop all EC2 instances whose CPU Utilization hasn't gone above 1% for the last 3 hours (36 5-minute samples)
 
 ### Running with external role
-1. ```docker run -e AWS_ACCESS_KEY_ID=<key> -e AWS_SECRET_ACCESS_KEY=<secret> tilo tilo --services=ec2 --period=5 
---samples=36 --threshold=1 --role=arn:aws:iam::<account>:role/<role-name>
+1. ```docker run -e AWS_ACCESS_KEY_ID=<key> -e AWS_SECRET_ACCESS_KEY=<secret> tilo tilo --services=ec2 --period=5 --samples=36 --threshold=1 --role=arn:aws:iam::<account>:role/<role-name>```
 This will stop all EC2 instances whose CPU Utilization hasn't gone above 1% for the last 3 hours (36 5-minute samples)
