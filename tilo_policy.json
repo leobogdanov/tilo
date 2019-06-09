@@ -1,0 +1,19 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Tilo",
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:GetMetricData",
+                "cloudwatch:Describe*",
+                "cloudwatch:ListMetrics",
+                "rds:DescribeDBInstances",
+                "rds:StopDBInstance",
+                "ec2:Describe*",
+                "ec2:StopInstance*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
