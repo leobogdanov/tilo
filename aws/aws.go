@@ -17,7 +17,7 @@ type Status struct {
 
 // ShutdownInactive main entry point for the job
 func ShutdownInactive(region *string, role *string, inServices []string, period int,
-	cycles int, threshold float64, dryRun bool) error {
+	samples int, threshold float64, dryRun bool) error {
 
 	sess, err := session.NewSession(&aws.Config{
 		Region: region},
@@ -43,7 +43,7 @@ func ShutdownInactive(region *string, role *string, inServices []string, period 
 		switch service {
 		case "ec2":
 			c := NewEC2()
-			err := c.ShutdownInactive(sess, period, cycles, threshold, dryRun)
+			err := c.ShutdownInactive(sess, period, samples, threshold, dryRun)
 			if err != nil {
 				log.Printf("EC2 scan aborted with error: %v", err)
 			} else {
@@ -51,7 +51,7 @@ func ShutdownInactive(region *string, role *string, inServices []string, period 
 			}
 		case "rds":
 			c := NewRDS()
-			err := c.ShutdownInactive(sess, period, cycles, threshold)
+			err := c.ShutdownInactive(sess, period, samples, threshold)
 			if err != nil {
 				log.Printf("RDS scan aborted with error: %v", err)
 			} else {

@@ -13,7 +13,7 @@ func main() {
 	role := flag.String("role", "", "Role to assume. Will default to AWS credentials permissions if not specified")
 	services := flag.String("services", "ec2", "Comma-separated list of services")
 	period := flag.Int("period", 5, "Period of cloudwatch metric sampling in minutes")
-	cycles := flag.Int("cycles", 36, "Number of period cycles to look back on")
+	samples := flag.Int("samples", 36, "Number of samples to look back on")
 	threshold := flag.Float64("threshold", 0, "Metric threshold")
 	dryRun := flag.Bool("dryRun", false, "Dry run mode won't stop any instances but will check if all permissions are present. Only supported for EC2")
 	flag.Parse()
@@ -24,6 +24,6 @@ func main() {
 	}
 
 	aws.ShutdownInactive(region, roleInput,
-		strings.Split(*services, ","), *period, *cycles, *threshold, *dryRun)
+		strings.Split(*services, ","), *period, *samples, *threshold, *dryRun)
 
 }

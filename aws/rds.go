@@ -24,7 +24,7 @@ func NewRDS() *RDS {
 
 // ShutdownInactive scans through and stops unused RDS instances
 func (c *RDS) ShutdownInactive(sess *session.Session, period int,
-	cycles int, threshold float64) error {
+	samples int, threshold float64) error {
 
 	instances, err := c.listRDS(sess)
 	if err != nil {
@@ -37,7 +37,7 @@ func (c *RDS) ShutdownInactive(sess *session.Session, period int,
 	for _, instance := range instances {
 		//log.Printf("Instance is %v", instance)
 		endTime := time.Now()
-		lookBackMinutes := period * (cycles + 3)
+		lookBackMinutes := period * (samples + 3)
 		duration, _ := time.ParseDuration(fmt.Sprintf("-%dm", lookBackMinutes))
 		startTime := endTime.Add(duration)
 
@@ -71,7 +71,7 @@ func (c *RDS) ShutdownInactive(sess *session.Session, period int,
 		thresholdBreached := false
 		offset := 0
 		metricdata := res.MetricDataResults[0]
-		for ; offset < len(metricdata.Timestamps) && offset < cycles; offset++ {
+		for ; offset < len(metricdata.Timestamps) && offset < samples; offset++ {
 			if *metricdata.Values[offset] > threshold {
 				thresholdBreached = true
 				break
@@ -82,10 +82,10 @@ func (c *RDS) ShutdownInactive(sess *session.Session, period int,
 		if thresholdBreached {
 			log.Printf("RDS InstanceId %s: threshold breached. Usage detected. Ignoring\n", *instance.DBInstanceIdentifier)
 			c.Status.SkippedCount++
-		} else if offset < cycles {
+		} else if offset < samples {
 			log.Printf("RDS InstanceId %s: not enough data\n", *instance.DBInstanceIdentifier)
 			c.Status.SkippedCount++
-		} else if offset >= cycles {
+		} else if offset >= samples {
 			log.Printf("RDS InstanceId %s: threshold not breached. Stopping instance\n", *instance.DBInstanceIdentifier)
 			res, err := c.stopRDS(sess, instance.DBInstanceIdentifier)
 			if err != nil {
